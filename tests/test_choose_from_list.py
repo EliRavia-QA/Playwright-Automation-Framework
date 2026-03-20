@@ -1,4 +1,4 @@
-# tests/test_inventory.py
+
 
 import allure
 import pytest
