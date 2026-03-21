@@ -29,12 +29,11 @@ jobs:
       run: playwright install --with-deps chromium
 
     - name: Run Pytest
-
       env:
         PYTHONPATH: .
-        HEADLESS: 1
+        HEADLESS: "true"
       run: |
-        pytest . --alluredir=allure-results
+        pytest . --alluredir=allure-results --browser chromium --headed=False
       continue-on-error: true
 
     - name: Upload Allure Results
