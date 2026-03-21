@@ -28,13 +28,13 @@ jobs:
       run: playwright install --with-deps chromium
 
     - name: Run Pytest
-      # התיקון כאן: הגדרת נתיב הפרויקט וסריקה של כל התיקיות (.)
       run: |
-        export PYTHONPATH=$PYTHONPATH:$(pwd)
-        pytest . --alluredir=allure-results
+        export PYTHONPATH=$PYTHONPATH:$(pwd):$(pwd)/Playwright-Automation-Framework
+        pytest . --alluredir=allure-results --headless
       continue-on-error: true
 
     - name: Upload Allure Results
+      if: always()
       uses: actions/upload-artifact@v4
       with:
         name: allure-results
