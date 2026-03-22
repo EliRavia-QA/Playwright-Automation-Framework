@@ -67,6 +67,24 @@ class TestSauceUI:
             assert actual_price.strip() == expected_price.strip(), \
                 f"טעות במחיר! צפינו ל-{expected_price} אבל קיבלנו {actual_price}"
 
+    @allure.feature("תהליך רכישה")
+    @allure.story("בדיקות ולידציה ושגיאות")
+    @allure.title("בדיקת שגיאה כשחסרים פרטי משתמש בצ'ק-אאוט")
+    def test_checkout_missing_info_error(self, setup_ui):
+        setup_ui.login_page.quick_login()
+
+        with allure.step("הוספת מוצר ומעבר לעגלה"):
+            setup_ui.inventory_page.add_item_to_cart("Sauce Labs Backpack")
+            setup_ui.inventory_page.click(".shopping_cart_link")
+
+        with allure.step("מעבר לצ'ק-אאוט ולחיצה על המשך ללא פרטים"):
+            setup_ui.inventory_page.click("#checkout")
+            setup_ui.inventory_page.click("#continue")
+
+        with allure.step("וידוא הופעת הודעת שגיאה על שם חסר"):
+            error_msg = setup_ui.login_page.get_error_message()
+            assert "First Name is required" in error_msg, f"הודעת השגיאה לא תקינה: {error_msg}"
+
 
 
 
