@@ -19,6 +19,7 @@ class InventoryPage(BasePage):
     PRODUCT_NAME_LOCATOR = ".inventory_item_name"
     FIRST_ITEM_NAME = "[data-test='inventory-item-name']"
     TITLE = ".title"
+    DETAILS_ITEM_PRICE = ".inventory_details_price"
 
     def add_fleece_jacket_to_cart(self):
 
@@ -75,6 +76,10 @@ class InventoryPage(BasePage):
     @allure.step("קבלת כמות המוצרים על האייקון של העגלה")
     def get_cart_badge(self):
         return str(self.header.get_cart_count())
+
+    @allure.step("קבלת מחיר המוצר מתוך דף הפירוט (Details Page)")
+    def get_price_from_details(self):
+        return self.get_text(self.DETAILS_ITEM_PRICE)
 
 
 

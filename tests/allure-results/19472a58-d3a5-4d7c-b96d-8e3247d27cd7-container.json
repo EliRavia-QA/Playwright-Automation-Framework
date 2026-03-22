@@ -1,0 +1,1 @@
+{"uuid": "420ab229-053e-4a23-9172-afa00eaba6a4", "children": ["3728d922-5634-4b91-8e26-d96f62297552"], "befores": [{"name": "setup_ui", "status": "passed", "steps": [{"name": "ניווט לאתר SauceDemo", "status": "passed", "start": 1774162345040, "stop": 1774162347939}], "start": 1774162345039, "stop": 1774162347939}], "start": 1774162345039, "stop": 1774162363255}

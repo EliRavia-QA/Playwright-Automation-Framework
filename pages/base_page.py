@@ -2,6 +2,9 @@
 import allure
 from playwright.sync_api import Page
 
+from utils.config import ConfigReader
+
+
 class BasePage:
 
     def __init__(self, page: Page):
@@ -50,6 +53,17 @@ class BasePage:
         with self.page.context.expect_page() as new_page_info:
             trigger_action()
         return new_page_info.value
+
+    @allure.step("ביצוע התחברות מהירה (Quick Login) מתוך ה-BasePage")
+    def quick_login(self):
+
+        user = ConfigReader.read_config('user_details', 'user')
+        password = ConfigReader.read_config('user_details', 'password')
+
+
+        self.fill_text("#user-name", user)
+        self.fill_text("#password", password)
+        self.click("#login-button")
 
 
 
