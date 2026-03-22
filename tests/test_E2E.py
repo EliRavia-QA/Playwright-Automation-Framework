@@ -13,7 +13,6 @@ class TestE2E:
     @allure.description(
         "טסט זה מוודא את הליבה של האתר: כניסת משתמש, בחירת מוצר ספציפי ווידוא שהמוצר מופיע בעגלת הקניות")
     def test_complete_purchase_flow(self, setup_ui):
-        # שימוש ב-setup_ui לפי התשתית החדשה שלנו
 
         with allure.step("טעינת פרטי הזדהות מקובץ Config"):
             user = ConfigReader.read_config('user_details', 'user')
@@ -25,7 +24,7 @@ class TestE2E:
 
         target_product = "Sauce Labs Backpack"
         with allure.step(f"בחירת מוצר: {target_product} והוספתו לסל"):
-            setup_ui.inventory_page.add_any_product(target_product)
+            setup_ui.inventory_page.add_item_to_cart(target_product)
 
         with allure.step("ווידוא עדכון מונה העגלה ב-Header"):
             cart_count = setup_ui.inventory_page.header.get_cart_count()

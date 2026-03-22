@@ -28,7 +28,7 @@ class TestInventory:
     def test_remove_fleece_from_cart(self, setup_ui):
         with allure.step("התחברות והוספת מוצר"):
             setup_ui.login_page.fill_page("standard_user", "secret_sauce")
-            setup_ui.inventory_page.add_any_product("Sauce Labs Fleece Jacket")
+            setup_ui.inventory_page.add_item_to_cart("Sauce Labs Fleece Jacket")
 
         with allure.step("ווידוא הוספה ומחיקה"):
             assert setup_ui.page.locator("[data-test='shopping-cart-badge']").text_content() == "1"
@@ -47,7 +47,7 @@ class TestInventory:
 
         for product in products_to_add:
             with allure.step(f"הוספת מוצר: {product}"):
-                setup_ui.inventory_page.add_any_product(product)
+                setup_ui.inventory_page.add_item_to_cart(product)
 
         with allure.step("ווידוא כמות מוצרים בעגלה"):
             expected_count = str(len(products_to_add))
