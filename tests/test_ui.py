@@ -26,6 +26,11 @@ class TestSauceUI:
     @allure.story("זרימת המשך קניות באתר")
     @allure.title("בדיקת כפתור המשך קניות מהעגלה")
     def test_continue_shopping(self, setup_ui):
+        with allure.step("קריאת נתוני התחברות מהקונפיג"):
+            user = ConfigReader.read_config('user_details', 'user')
+            password = ConfigReader.read_config('user_details', 'password')
+        with allure.step(f"התחברות למערכת עם משתמש {user}"):
+            setup_ui.login_page.fill_page(user, password)
         with allure.step("הוספת מוצר לעגלה ומעבר לעמוד העגלה"):
             setup_ui.inventory_page.add_item_to_cart("Sauce Labs Backpack")
             setup_ui.inventory_page.click_cart()

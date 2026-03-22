@@ -2,9 +2,22 @@ import pytest
 import allure
 import os
 from playwright.sync_api import Page, APIRequestContext, Playwright
+
+from pages.cart_page import CartPage
 from pages.login_page import LoginPage
 from pages.inventory_page import InventoryPage
 
+
+@pytest.fixture(scope="session")
+def browser_type_launch_args(browser_type_launch_args):
+    is_github = os.getenv("GITHUB_ACTIONS") == "true"
+
+    if not is_github:
+        return {
+            **browser_type_launch_args,
+            "slow_mo": 2000,
+        }
+    return browser_type_launch_args
 
 
 class App:
@@ -13,6 +26,7 @@ class App:
         self.api_request = api_request
         self.login_page = LoginPage(page)
         self.inventory_page = InventoryPage(page)
+        self.cart_page = CartPage(page)
         self.console_logs = []
 
 
@@ -28,11 +42,8 @@ def app(page: Page, playwright: Playwright):
     api_context.dispose()
 
 
-
-
 @pytest.fixture
 def setup_ui(app):
-
     with allure.step("ניווט לאתר SauceDemo"):
         app.page.goto("https://www.saucedemo.com/")
     return app
@@ -40,7 +51,6 @@ def setup_ui(app):
 
 @pytest.fixture
 def api_only(app):
-
     return app
 
 
@@ -51,7 +61,6 @@ def pytest_runtest_makereport(item, call):
     rep = outcome.get_result()
 
     if rep.when == 'call' and rep.failed:
-
         app_instance = None
         for arg in item.funcargs.values():
             if isinstance(arg, App):
@@ -77,12 +86,14 @@ def pytest_runtest_makereport(item, call):
 
 
 def pytest_sessionfinish(session, exitstatus):
-    results_dir = os.path.join(session.config.rootdir, 'tests', '=allure-results')
-    if os.path.exists(results_dir):
-        env_file = os.path.join(results_dir, 'environment.properties')
-        with open(env_file, 'w') as f:
-            f.write(f"Platform={os.name}\n")
-            f.write(f"Project=SauceDemo_Automation\n")
-            f.write(f"URL=https://www.saucedemo.com/\n")
-            f.write(f"Tester=Eli_Ravia\n")
-            f.write(f"Python_Version={os.sys.version.split()[0]}\n")
+    results_dir = os.path.join(session.config.rootdir, 'allure-results')
+    if not os.path.exists(results_dir):
+        os.makedirs(results_dir, exist_ok=True)
+
+    env_file = os.path.join(results_dir, 'environment.properties')
+    with open(env_file, 'w') as f:
+        f.write(f"Platform={os.name}\n")
+        f.write(f"Project=SauceDemo_Automation\n")
+        f.write(f"URL=https://www.saucedemo.com/\n")
+        f.write(f"Tester=Eli_Ravia\n")
+        f.write(f"Python_Version={os.sys.version.split()[0]}\n")
